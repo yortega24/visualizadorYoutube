@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.logginUsr = exports.getUsuarios = exports.newUsuario = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const usuariosM_1 = __importDefault(require("../models/usuariosM"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const newUsuario = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { body } = req;
     const { nombreUsr, psw } = req.body;
@@ -30,9 +31,7 @@ const newUsuario = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
         //inserta a bd
         yield usuariosM_1.default.create({
             nombreUsr: nombreUsr,
-            apellidoUsr: apellidoUsr,
             psw: pswencriptada,
-            email
         });
         resp.json({
             msg: 'Se agrego un nuevo usuario',
@@ -53,10 +52,32 @@ const getUsuarios = (req, resp) => {
     });
 };
 exports.getUsuarios = getUsuarios;
-const logginUsr = (req, resp) => {
-    console.log(req.body);
+const logginUsr = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    //validar existencia d eusuario
+    const { nombreUsr, psw } = req.body;
+    const usuario = yield usuariosM_1.default.findOne({ where: { nombreUsr: nombreUsr } });
+    if (!usuario) {
+        return resp.status(400).json({
+            msg: ' No existe el usuario  ' + nombreUsr,
+        });
+    }
+    //validar psw del usuario 
+    const pswvalidada = yield bcrypt_1.default.compare(psw, usuario.psw);
+    if (!pswvalidada) {
+        return resp.status(400).json({
+            msg: "Contraseña incorrecta"
+        });
+    }
+    //Generar token
+    const token = jsonwebtoken_1.default.sign({
+        //regresar a usuario
+        newUsuario: nombreUsr
+    }, 
+    //palabra secreta
+    process.env.SECRET_KEY || 'Parangari', //expira token en 3 min
+    { expiresIn: '180000' });
     resp.json({
-        msg: 'Login user'
+        token
     });
-};
+});
 exports.logginUsr = logginUsr;

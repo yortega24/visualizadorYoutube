@@ -15,7 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //import express from 'express';
 const express_1 = __importDefault(require("express"));
 const usuario_1 = __importDefault(require("../routes/usuario"));
+const favorito_1 = __importDefault(require("../routes/favorito"));
 const usuariosM_1 = __importDefault(require("./usuariosM"));
+const favoritoM_1 = __importDefault(require("./favoritoM"));
 class Apiserver {
     constructor() {
         this.app = (0, express_1.default)();
@@ -33,6 +35,7 @@ class Apiserver {
     }
     routes() {
         this.app.use('/api/usuarios', usuario_1.default);
+        this.app.use('/api/favoritos', favorito_1.default);
     }
     midleware() {
         this.app.use(express_1.default.json());
@@ -42,6 +45,7 @@ class Apiserver {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 yield usuariosM_1.default.sync(); //crea tabla usuario
+                yield favoritoM_1.default.sync(); //crea tabla usuario
                 //await sequelize.authenticate();
                 //console.log('conexion exitosa')
             }
