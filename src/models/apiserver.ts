@@ -1,9 +1,12 @@
 //import express from 'express';
 import express,{Application} from 'express';
 import newUsuario from '../routes/usuario';
+import getfavorito from '../routes/favorito';
 import { Sequelize } from 'sequelize';
 import Usuario from './usuariosM';
+import Favorito from './favoritoM';
 import sequelize from '../database/coneccion';
+import { getFavoritos } from '../controllers/favoritos';
 
 class Apiserver{
     //private app:express.Application;
@@ -31,6 +34,7 @@ class Apiserver{
     }
     routes(){
         this.app.use('/api/usuarios',newUsuario);
+        this.app.use('/api/favoritos',getfavorito);
         
     }
     midleware(){
@@ -41,6 +45,7 @@ class Apiserver{
     async dbConexion(){
         try {
             await Usuario.sync();//crea tabla usuario
+            await Favorito.sync();//crea tabla usuario
             //await sequelize.authenticate();
             //console.log('conexion exitosa')
              
