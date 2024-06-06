@@ -1,6 +1,9 @@
 //import express from 'express';
 import express,{Application} from 'express';
 import newUsuario from '../routes/usuario';
+import { Sequelize } from 'sequelize';
+import Usuario from './usuariosM';
+import sequelize from '../database/coneccion';
 
 class Apiserver{
     //private app:express.Application;
@@ -14,6 +17,8 @@ class Apiserver{
 
         this.midleware();
         this.routes();
+
+        this.dbConexion();
 
         //console.log(process.env.PORT);
     }
@@ -30,6 +35,19 @@ class Apiserver{
     }
     midleware(){
         this.app.use(express.json())
+    }
+
+    //testeo deconeccion
+    async dbConexion(){
+        try {
+            await Usuario.sync();//crea tabla usuario
+            //await sequelize.authenticate();
+            //console.log('conexion exitosa')
+             
+        } catch (error) {
+            console.log('Conexión perdida')
+        }
+        
     }
 }
 

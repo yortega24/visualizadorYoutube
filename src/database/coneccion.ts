@@ -1,9 +1,12 @@
 import { Sequelize } from "sequelize";
+//import { MsSqlDialect } from 'sequelize/mssql';
 //Sequelize(uri: string, options?: Options | undefined): Sequelize
 
-const sequelize =new Sequelize('prueba','YORTEGA','hola2',{
-    host: 'localhost',
-    dialect:'mssql',
-});
+var sequelize = new Sequelize('Vistas','hola','hola2',{
+    dialect: 'mssql',
+    host:'YESSENIAORTEGA',
+    port: 1433,
+    
+  });
 
 export default sequelize;
