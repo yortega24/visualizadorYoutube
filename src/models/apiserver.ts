@@ -7,7 +7,7 @@ import Usuario from './usuariosM';
 import Favorito from './favoritoM';
 import sequelize from '../database/coneccion';
 import { getFavoritos } from '../controllers/favoritos';
-
+import cors from 'cors'
 class Apiserver{
     //private app:express.Application;
     private app: Application;
@@ -38,7 +38,11 @@ class Apiserver{
         
     }
     midleware(){
+        //parseo body
         this.app.use(express.json())
+
+        //cors
+        this.app.use(cors());
     }
 
     //testeo deconeccion

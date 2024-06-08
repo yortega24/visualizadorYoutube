@@ -18,6 +18,7 @@ const usuario_1 = __importDefault(require("../routes/usuario"));
 const favorito_1 = __importDefault(require("../routes/favorito"));
 const usuariosM_1 = __importDefault(require("./usuariosM"));
 const favoritoM_1 = __importDefault(require("./favoritoM"));
+const cors_1 = __importDefault(require("cors"));
 class Apiserver {
     constructor() {
         this.app = (0, express_1.default)();
@@ -38,7 +39,10 @@ class Apiserver {
         this.app.use('/api/favoritos', favorito_1.default);
     }
     midleware() {
+        //parseo body
         this.app.use(express_1.default.json());
+        //cors
+        this.app.use((0, cors_1.default)());
     }
     //testeo deconeccion
     dbConexion() {
